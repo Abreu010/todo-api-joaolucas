@@ -2,6 +2,9 @@
 
 const tarefaService = require("../services/tarefaService");
 
-// As funcoes do controller entram aqui.
+async function listar(req, res) {
+const tarefas = await tarefaService.listarTarefas(req.query);
+res.status(____).json(tarefas);
+}
 
-module.exports = {};
+module.exports = {listar};
