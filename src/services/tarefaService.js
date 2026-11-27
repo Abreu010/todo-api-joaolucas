@@ -35,5 +35,14 @@ async function atualizarTarefa(id, dados) {
   return await buscarTarefaPorId(id);
 }
 
+async function atualizarParcialTarefa(id, dados) {
+  const tarefa = await buscarTarefaPorId(id);
+  if (!tarefa) return null; 
+  if (dados.titulo !== undefined) tarefa.titulo = dados.titulo;
+  if (dados.prioridade !== undefined) tarefa.prioridade = dados.prioridade;
+  if (dados.status !== undefined) tarefa.status = dados.status; 
+  return await atualizarTarefa(id, tarefa);
+}
 
-    module.exports = {listarTarefas, buscarTarefaPorId, criarTarefa, atualizarTarefa, };
+
+    module.exports = {listarTarefas, buscarTarefaPorId, criarTarefa, atualizarTarefa, atualizarParcialTarefa,};

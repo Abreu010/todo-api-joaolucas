@@ -8,7 +8,9 @@ const router = express.Router();
 
 router.get("/", tarefaController.listar);
 
+router.patch("/:id", validarId, tarefaController.atualizarParcial);
 
+router.post("/", tarefaController.criar);
 
 
 module.exports = router;
