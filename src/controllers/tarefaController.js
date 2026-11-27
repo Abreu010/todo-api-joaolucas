@@ -17,13 +17,24 @@ async function buscarPorId(req, res) {
 }
 
 async function criar(req, res) {
-const novaTarefa = await tarefaService.criarTarefa(req.body);
-res.status(404).json(novaTarefa);
+  const erro = tarefaService.validarTarefa(req.body, true);
+  if (erro) {
+    res.status(400).json({ erro: erro });
+    return;
+  }
+
+  const novaTarefa = await tarefaService.criarTarefa(req.body);
+  res.status(201).json(novaTarefa);
 }
 
 async function atualizar(req, res) {
-  const tarefa = await tarefaService.atualizarTarefa(req.params.id, req.body);
+  const erro = tarefaService.validarTarefa(req.body, true);
+  if (erro) {
+    res.status(400).json({ erro: erro });
+    return;
+  }
 
+  const tarefa = await tarefaService.atualizarTarefa(req.params.id, req.body);
   if (!tarefa) {
     return res.status(404).json({ erro: "Tarefa não encontrada" });
   }
@@ -32,8 +43,13 @@ async function atualizar(req, res) {
 }
 
 async function atualizarParcial(req, res) {
-  const tarefa = await tarefaService.atualizarParcialTarefa(req.params.id, req.body);
+  const erro = tarefaService.validarTarefa(req.body, false);
+  if (erro) {
+    res.status(400).json({ erro: erro });
+    return;
+  }
 
+  const tarefa = await tarefaService.atualizarParcialTarefa(req.params.id, req.body);
   if (!tarefa) {
     return res.status(404).json({ erro: "Tarefa não encontrada" });
   }
@@ -41,10 +57,20 @@ async function atualizarParcial(req, res) {
   return res.status(200).json(tarefa);
 }
 
-async function deletarTarefa(id) {
-  const [resultado] = await db.query("DELETE FROM tarefas WHERE id = ?", [id]);
-  return resultado.affectedRows > 0;
+async function deletar(req, res) {
+  const deletado = await tarefaService.deletarTarefa(req.params.id);
+  if (!deletado) {
+    return res.status(404).json({ erro: "Tarefa não encontrada" });
+  }
+
+  return res.status(204).send();
 }
 
-
-module.exports = { listar, buscarPorId, criar, atualizar, atualizarParcial, deletarTarefa};
+module.exports = {
+  listar,
+  buscarPorId,
+  criar,
+  atualizar,
+  atualizarParcial,
+  deletar,
+};
