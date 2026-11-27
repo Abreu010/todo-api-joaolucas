@@ -9,6 +9,25 @@
     async function listarTarefas(filtros) {
     const [linhas] = await db.query("SELECT * FROM tarefas");
     let resultado = linhas;
+
+async function listarTarefas(filtros) {
+  const [linhas] = await db.query("SELECT * FROM tarefas");
+  let resultado = linhas;
+
+  if (filtros.status) {
+    resultado = resultado.filter((tarefa) => tarefa.status === filtros.status);
+  }
+
+  if (filtros.prioridade) {
+    resultado = resultado.filter(
+      (tarefa) => tarefa.prioridade === filtros.prioridade
+    );
+  }
+
+  return resultado;
+}
+
+
     return resultado;
     }
     async function buscarTarefaPorId(id) {
@@ -65,6 +84,8 @@ function validarTarefa(dados, completo) {
   if (dados.status !== undefined && !STATUS.includes(dados.status)) {
     return "O status deve ser a_fazer, fazendo ou feita";
   }
+
+
 
   return null;
 }
