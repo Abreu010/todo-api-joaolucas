@@ -12,5 +12,6 @@ router.patch("/:id", validarId, tarefaController.atualizarParcial);
 
 router.post("/", tarefaController.criar);
 
+router.delete("/:id", validarId, tarefaController.deletar);
 
 module.exports = router;

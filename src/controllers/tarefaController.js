@@ -41,6 +41,10 @@ async function atualizarParcial(req, res) {
   return res.status(200).json(tarefa);
 }
 
+async function deletarTarefa(id) {
+  const [resultado] = await db.query("DELETE FROM tarefas WHERE id = ?", [id]);
+  return resultado.affectedRows > 0;
+}
 
 
-module.exports = { listar, buscarPorId, criar, atualizar, atualizarParcial, };
+module.exports = { listar, buscarPorId, criar, atualizar, atualizarParcial, deletarTarefa};
